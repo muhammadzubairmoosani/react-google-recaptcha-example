@@ -33,7 +33,7 @@ export default function Home() {
       <br />
 
       <ReCAPTCHA
-        sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
         onChange={onChange}
       />
     </div>

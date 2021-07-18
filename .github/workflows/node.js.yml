@@ -27,6 +27,8 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run build
+        env:
+          NEXT_PUBLIC_RECAPTCHA_KEY: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
       - run: npm run export
       - run: npm test
       - run: touch ./out/.nojekyll
