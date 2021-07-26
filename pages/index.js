@@ -1,12 +1,10 @@
 import styles from "../styles/Home.module.css";
 import ReCAPTCHA from "react-google-recaptcha";
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 
 export default function Home() {
-  const [token, setToken] = useState("");
   const recaptchaRef = useRef()
 
-  const onChange = (token) => token && setToken(token);
 
   const validateHuman = (token) => {
     const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY
@@ -36,11 +34,7 @@ export default function Home() {
       <form onSubmit={_onSubmit}>
         <input className={styles.input_field} required placeholder="Message..." />
 
-        <button
-          className={`${styles.send_btn} ${!token ? styles.disabled_send_btn : ""}`}
-        >
-          Send
-        </button>
+        <button className={styles.send_btn}>Send</button>
       </form>
 
 
@@ -48,7 +42,6 @@ export default function Home() {
         sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
         size="invisible"
         ref={recaptchaRef}
-        onChange={onChange}
       />
     </div>
   );
