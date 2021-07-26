@@ -24,6 +24,7 @@
   background: #99cc33;
   color: white;
   cursor: pointer;
+  outline: none;
 }
 
 .disabled_send_btn {

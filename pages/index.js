@@ -1,39 +1,53 @@
 import styles from "../styles/Home.module.css";
 import ReCAPTCHA from "react-google-recaptcha";
-import React, { useState } from "react";
-
-const Form = ({ token }) => (
-  <form onSubmit={(e) => e.preventDefault()}>
-    <input className={styles.input_field} required placeholder="Message..." />
-
-    <button
-      className={`${styles.send_btn} ${!token ? styles.disabled_send_btn : ""}`}
-      disabled={!token}
-    >
-      Send
-    </button>
-  </form>
-);
+import React, { useState, useRef } from "react";
 
 export default function Home() {
   const [token, setToken] = useState("");
+  const recaptchaRef = useRef()
 
   const onChange = (token) => token && setToken(token);
 
+  const validateHuman = (token) => {
+    const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY
+
+    const api = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
+
+    fetch(api, { method: 'POST' })
+      .then(res => res.json())
+      .then(json => console.log(json))
+      .catch(err => console.log(err))
+  }
+
+  const _onSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = await recaptchaRef.current.executeAsync()
+
+    recaptchaRef.current.reset()
+
+    validateHuman(token)
+  }
+
+
   return (
     <div className={styles.container}>
-      {token && (
-        <p className={styles.token}>
-          <b> Captcha token:</b> {token}
-        </p>
-      )}
 
-      <Form token={token} />
+      <form onSubmit={_onSubmit}>
+        <input className={styles.input_field} required placeholder="Message..." />
 
-      <br />
+        <button
+          className={`${styles.send_btn} ${!token ? styles.disabled_send_btn : ""}`}
+        >
+          Send
+        </button>
+      </form>
+
 
       <ReCAPTCHA
-        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
+        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        size="invisible"
+        ref={recaptchaRef}
         onChange={onChange}
       />
     </div>
