@@ -5,10 +5,10 @@ import React, { useRef } from "react";
 export default function Home() {
   const recaptchaRef = useRef()
 
+  const siteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+  const secret = '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
 
   const validateHuman = (token) => {
-    const secret = process.env.NEXT_PUBLIC_RECAPTCHA_SECRET_KEY
-
     const api = `https://www.google.com/recaptcha/api/siteverify?secret=${secret}&response=${token}`
 
     fetch(api, { method: 'POST' })
@@ -37,9 +37,8 @@ export default function Home() {
         <button className={styles.send_btn}>Send</button>
       </form>
 
-
       <ReCAPTCHA
-        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}
+        sitekey={siteKey}
         size="invisible"
         ref={recaptchaRef}
       />
